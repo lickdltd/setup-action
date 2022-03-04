@@ -23,6 +23,10 @@ inputs:
     description: Test
     required: true
     default: 'false'
+outputs:
+  git-hash-short:
+    description: Test
+    value: ${{ steps.git-hash.outputs.hash }}
 runs:
   using: composite
   steps:
@@ -51,3 +55,7 @@ runs:
     - name: Login to AWS ECR
       if: inputs.aws-login == 'true' && inputs.aws-account-id != '' && inputs.aws-role-name != '' && inputs.aws-ecr-login == 'true'
       uses: aws-actions/amazon-ecr-login@v1
+    - name: Set Git hash short
+      id: git-hash
+      shell: bash
+      run: echo '::set-output name=hash::$(${GITHUB_SHA} | cut -b 0-10)'
