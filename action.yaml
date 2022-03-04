@@ -26,7 +26,7 @@ inputs:
 outputs:
   git-hash-short:
     description: Test
-    value: ${{ steps.git-hash.outputs.hash }}
+    value: ${{ steps.git-hash.outputs.random-id }}
 runs:
   using: composite
   steps:
@@ -58,4 +58,4 @@ runs:
     - name: Set Git hash short
       id: git-hash
       shell: bash
-      run: echo '::set-output name=hash::$(echo ${GITHUB_SHA:0:10})'
+      run: echo "::set-output name=random-id::$(echo $RANDOM)"
