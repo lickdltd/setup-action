@@ -58,4 +58,4 @@ runs:
     - name: Set Git hash short
       id: git-hash
       shell: bash
-      run: echo "::set-output name=random-id::$(echo $RANDOM)"
+      run: echo "::set-output name=random-id::$(echo ${{ github.sha }} | cut -c 1-10)"
