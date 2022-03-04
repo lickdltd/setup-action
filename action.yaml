@@ -54,7 +54,7 @@ runs:
       shell: bash
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.ssh-private-key }}" > ~/.ssh/id_rsa
+        echo "${{ inputs.ssh-private-key }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
     - name: Set Git hash short
       id: git-hash
