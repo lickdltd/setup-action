@@ -58,4 +58,4 @@ runs:
     - name: Set Git hash short
       id: git-hash
       shell: bash
-      run: echo '::set-output name=hash::$(${GITHUB_SHA} | cut -b 0-10)'
+      run: echo '::set-output name=hash::$(echo ${GITHUB_SHA} | cut -b 0-10)'
