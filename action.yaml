@@ -17,7 +17,8 @@ inputs:
     required: false
   aws-role-name:
     description: Test
-    required: false
+    required: true
+    default: 'GitHub'
   aws-ecr-login:
     description: Test
     required: true
