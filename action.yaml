@@ -13,11 +13,11 @@ inputs:
   aws-role-name:
     description: The AWS role name
     required: true
-    default: 'GitHub'
+    default: GitHub
 outputs:
   git-hash-short:
     description: The Git short hash
-    value: ${{ steps.git-hash.outputs.random-id }}
+    value: ${{ steps.git-hash.outputs.hash }}
 runs:
   using: composite
   steps:
@@ -49,4 +49,4 @@ runs:
     - name: Set Git hash short
       id: git-hash
       shell: bash
-      run: echo "::set-output name=random-id::$(echo ${{ github.sha }} | cut -c 1-10)"
+      run: echo "::set-output name=hash::$(echo ${{ github.sha }} | cut -c 1-10)"
