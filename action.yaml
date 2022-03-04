@@ -1,50 +1,38 @@
 name: Setup
 description: Setup
 inputs:
-  ghcr-login:
-    description: Test
-    required: true
-    default: 'false'
   ghcr-pat:
-    description: Test
+    description: The PAT to login to GitHub Container registry
     required: false
-  aws-login:
-    description: Test
-    required: true
-    default: 'false'
   aws-account-id:
-    description: Test
+    description: The AWS account ID
     required: false
   aws-role-name:
-    description: Test
+    description: The AWS role name
     required: true
     default: 'GitHub'
-  aws-ecr-login:
-    description: Test
-    required: true
-    default: 'false'
 outputs:
   git-hash-short:
-    description: Test
+    description: The Git short hash
     value: ${{ steps.git-hash.outputs.random-id }}
 runs:
   using: composite
   steps:
     - name: Login to GitHub Container registry
-      if: inputs.ghcr-login == 'true' && inputs.ghcr-pat != ''
+      if: inputs.ghcr-pat != ''
       uses: docker/login-action@v1
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ inputs.ghcr-pat }}
     - name: Configure AWS credentials
-      if: inputs.aws-login == 'true' && inputs.aws-account-id != '' && inputs.aws-role-name != ''
+      if: inputs.aws-account-id != '' && inputs.aws-role-name != ''
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-region: eu-west-1
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/${{ inputs.aws-role-name }}
     - name: Store AWS credentials
-      if: inputs.aws-login == 'true' && inputs.aws-account-id != '' && inputs.aws-role-name != ''
+      if: inputs.aws-account-id != '' && inputs.aws-role-name != ''
       shell: bash
       run: |
         mkdir -p ~/.aws
@@ -53,7 +41,7 @@ runs:
         echo "aws_secret_access_key = ${{ env.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
         echo "aws_session_token = ${{ env.AWS_SESSION_TOKEN }}" >> ~/.aws/credentials
     - name: Login to AWS ECR
-      if: inputs.aws-login == 'true' && inputs.aws-account-id != '' && inputs.aws-role-name != '' && inputs.aws-ecr-login == 'true'
+      if: inputs.aws-account-id != '' && inputs.aws-role-name != ''
       uses: aws-actions/amazon-ecr-login@v1
     - name: Set Git hash short
       id: git-hash
