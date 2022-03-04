@@ -14,6 +14,9 @@ inputs:
     description: The AWS role name
     required: true
     default: GitHub
+  ssh-private-key:
+    description: The SSH private key
+    required: false
 outputs:
   git-hash-short:
     description: The Git short hash
@@ -46,6 +49,13 @@ runs:
     - name: Login to AWS ECR
       if: inputs.aws-region != '' && inputs.aws-account-id != '' && inputs.aws-role-name != ''
       uses: aws-actions/amazon-ecr-login@v1
+    - name: Setup SSH
+      if: inputs.ssh-private-key != ''
+      shell: bash
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.ssh-private-key }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
     - name: Set Git hash short
       id: git-hash
       shell: bash
