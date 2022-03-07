@@ -59,7 +59,7 @@ runs:
         echo "aws_secret_access_key = ${{ env.AWS_SECRET_ACCESS_KEY }}" >> ${{ inputs.aws-directory }}/credentials
         echo "aws_session_token = ${{ env.AWS_SESSION_TOKEN }}" >> ${{ inputs.aws-directory }}/credentials
     - name: Login to AWS ECR
-      if: inputs.aws-region != '' && inputs.aws-account-id != '' && inputs.aws-role-name != '' && inputs.aws-ecs == 'true'
+      if: inputs.aws-region != '' && inputs.aws-account-id != '' && inputs.aws-role-name != '' && inputs.aws-ecr == 'true'
       uses: aws-actions/amazon-ecr-login@v1
     - name: Setup SSH
       if: inputs.ssh-private-key != ''
