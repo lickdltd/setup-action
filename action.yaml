@@ -1,6 +1,10 @@
 name: Setup
 description: Setup
 inputs:
+  shell:
+    description: The shell to use
+    required: false
+    default: bash
   ghcr-pat:
     description: The PAT to login to GitHub Container registry
     required: false
@@ -47,7 +51,7 @@ runs:
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/${{ inputs.aws-role-name }}
     - name: Store AWS credentials
       if: inputs.aws-region != '' && inputs.aws-account-id != '' && inputs.aws-role-name != ''
-      shell: bash
+      shell: ${{ inputs.shell }}
       run: |
         mkdir -p ${{ inputs.aws-directory }}
         echo "[default]" > ${{ inputs.aws-directory }}/credentials
@@ -59,12 +63,12 @@ runs:
       uses: aws-actions/amazon-ecr-login@v1
     - name: Setup SSH
       if: inputs.ssh-private-key != ''
-      shell: bash
+      shell: ${{ inputs.shell }}
       run: |
         mkdir -p ${{ inputs.ssh-directory }}
         echo "${{ inputs.ssh-private-key }}" > ${{ inputs.ssh-directory }}/id_rsa
         chmod 600 ${{ inputs.ssh-directory }}/id_rsa
     - name: Set Git hash short
       id: git-hash
-      shell: bash
+      shell: ${{ inputs.shell }}
       run: echo "::set-output name=hash::$(echo ${{ github.sha }} | cut -c 1-10)"
